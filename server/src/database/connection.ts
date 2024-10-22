@@ -1,16 +1,24 @@
-import { Sequelize } from "sequelize-typescript";
-import { envConfig } from "../config.ts/config";
-const sequalize=new Sequelize(envConfig.connectionString as string)
-try{
-    sequalize.authenticate()
+import {Sequelize} from 'sequelize-typescript'
+import { envConfig } from '../config.ts/config'
+
+const sequelize = new Sequelize(envConfig.connectionString as string,{
+    models : [__dirname + '/models']
+})
+
+try {
+    sequelize.authenticate()
     .then(()=>{
-        console.log("Successful authentication!!!")
+        console.log("Connected !!! 😀")
     })
     .catch(err=>{
-        console.log("error!!",err)
+        console.log("ERROR 😝 : ", err)
     })
-}catch(error){
+} catch (error) {
     console.log(error)
 }
 
-export default sequalize
+sequelize.sync({force : false}).then(()=>{
+    console.log("synced !!")
+})
+
+export default sequelize
